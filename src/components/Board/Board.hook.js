@@ -36,7 +36,7 @@ export default class BoardCls {
     return this.cells.filter(cell => cell.tile != null);
   }
 
-  getCellsByColum() {
+  cellsByColum() {
     return this.cells.reduce((cellGrid, cell) => {
       cellGrid[cell.x] = cellGrid[cell.x] || [];
       cellGrid[cell.x][cell.y] = cell;
@@ -74,8 +74,35 @@ export const handleKeyDown = (e, grid) => {
       console.log(e.key)
       break;
   }
+
+  
 }
 
-function moveUp(grid) {
-  console.log(grid);
+function moveUp(cells) {
+  slideTiles(cells);
+}
+
+function slideTiles(cells) {
+    cells.forEach(group => {
+    for(let i = 1; i < group.length; i++) {
+      const cell = group[i];
+      if (cell.tile == null) continue;
+      let lastValidCell;
+      for (let j = i - 1; j >= 0; j--) {
+        const moveToCell = group[j];
+        if (!moveToCell.canAccept(cell)) break;
+        lastValidCell = moveToCell;
+      }
+
+      if (lastValidCell != null) {
+        if (lastValidCell.tile != null) {
+          lastValidCell.mergeTile = cell.tile;
+        } else {
+          lastValidCell.tile = cell.tile;
+        }
+      }
+
+      cell.tile = null;
+    }
+  })
 }

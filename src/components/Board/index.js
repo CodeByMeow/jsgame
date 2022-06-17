@@ -19,7 +19,7 @@ const Board = () => {
     setTiles(tiles);
   }, []);
 
-  useEvent("keydown", (e) => handleKeyDown(e, board.getCellsByColum()));
+  useEvent("keydown", (e) => handleKeyDown(e, board.cellsByColum()));
 
   return (
     <Content >
